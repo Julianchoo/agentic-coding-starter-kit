@@ -55,6 +55,9 @@ jobs:
       - name: Run TypeScript type check
         run: pnpm typecheck
 
+      - name: Run bootstrap script unit tests
+        run: pnpm test:bootstrap
+
   build:
     name: Build
     runs-on: ubuntu-latest

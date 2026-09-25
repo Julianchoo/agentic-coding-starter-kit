@@ -4,6 +4,17 @@ A production-oriented starter kit for building AI-powered web apps with an agent
 
 The goal is simple: install the starter, describe the product you want to build, and let your coding agent help turn the boilerplate into your actual POC, MVP, or internal tool.
 
+## Nueva app en 1 comando
+
+Crea el repo de GitHub, la base de Neon, el proyecto de Vercel (+ Blob), el login con Google, el `.env` y el primer deploy:
+
+```bash
+git clone https://github.com/Julianchoo/agentic-coding-starter-kit mi-app
+cd mi-app && pnpm i && pnpm bootstrap mi-app
+```
+
+Requisitos, opciones y detalles en [docs/bootstrap.md](docs/bootstrap.md).
+
 ## What You Get
 
 - **Next.js 16 and React 19** with the App Router
@@ -35,10 +46,13 @@ Then configure and run the app:
 
 ```bash
 cp env.example .env
+# edit .env: set POSTGRES_URL (Docker URL below) and BETTER_AUTH_SECRET
 docker compose up -d
 pnpm db:migrate
 pnpm dev
 ```
+
+Or skip all of that with `pnpm bootstrap mi-app` (see [Nueva app en 1 comando](#nueva-app-en-1-comando)).
 
 Open [http://localhost:3000](http://localhost:3000).
 
@@ -78,11 +92,15 @@ Claude will run the skill end-to-end and ask you the few decisions it actually n
 Start from `env.example` and update values for your environment:
 
 ```env
-# Database
-POSTGRES_URL=postgresql://dev_user:dev_password@localhost:5432/postgres_dev
+# Database (Neon pooled URL; `pnpm bootstrap` fills it in)
+POSTGRES_URL=postgresql://USER:PASSWORD@ep-xxxx-pooler.REGION.aws.neon.tech/neondb?sslmode=require
 
 # Authentication - Better Auth
-BETTER_AUTH_SECRET=your-random-secret
+BETTER_AUTH_SECRET=
+
+# Google OAuth (optional)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 # AI Integration via OpenRouter
 OPENROUTER_API_KEY=
@@ -102,9 +120,9 @@ POLAR_WEBHOOK_SECRET=polar_
 POLAR_ACCESS_TOKEN=polar_
 ```
 
-For local development, the default database URL works with the included `docker-compose.yml`. For production, use the database URL from your hosting provider.
+`pnpm bootstrap` fills in these values for you (see [docs/bootstrap.md](docs/bootstrap.md)). To use the included `docker-compose.yml` instead, set `POSTGRES_URL=postgresql://dev_user:dev_password@localhost:5432/postgres_dev`.
 
-Generate a strong `BETTER_AUTH_SECRET` before deploying. The starter ships with a development value only so you can get moving quickly.
+`BETTER_AUTH_SECRET` ships empty. Generate one with `openssl rand -base64 32` (`pnpm bootstrap` does this for you).
 
 ## Default Auth
 
@@ -120,15 +138,9 @@ The current auth setup includes:
 
 In development, verification and password reset links are logged to the terminal instead of being sent through an email provider. When you are ready for production, ask your coding agent to connect an email service and update the Better Auth email callbacks.
 
-### Adding Google OAuth
+### Google OAuth
 
-Google OAuth is no longer the default, but adding it back is straightforward. Ask your coding agent:
-
-```text
-Add Google OAuth to this Better Auth setup. Keep email/password login enabled, add the Google provider, update the auth UI, and document the required Google environment variables.
-```
-
-Your agent should update the Better Auth config, add the required `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` variables, and adjust the login UI.
+Google sign-in is built in but only turns on when both `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. A "Continue with Google" button then appears on `/login` and `/register`. The OAuth redirect URI is `<app url>/api/auth/callback/google`. `pnpm bootstrap` creates the Google Cloud project and walks you through creating the OAuth client.
 
 ## Build With an Agent
 

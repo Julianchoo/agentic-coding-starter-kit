@@ -3,12 +3,18 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { AuthDivider, GoogleSignInButton } from "@/components/auth/google-sign-in-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn, useSession } from "@/lib/auth-client"
 
-export function SignInButton() {
+interface SignInButtonProps {
+  /** Server-computed: true when Google OAuth credentials are configured. */
+  googleEnabled?: boolean
+}
+
+export function SignInButton({ googleEnabled = false }: SignInButtonProps) {
   const { data: session, isPending: sessionPending } = useSession()
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -51,6 +57,12 @@ export function SignInButton() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
+      {googleEnabled && (
+        <>
+          <GoogleSignInButton callbackURL="/dashboard" />
+          <AuthDivider />
+        </>
+      )}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input

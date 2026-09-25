@@ -38,6 +38,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# pnpm bootstrap progress (resource IDs only, no secrets)
+.bootstrap.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

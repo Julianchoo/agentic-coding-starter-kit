@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { auth } from "@/lib/auth"
+import { auth, isGoogleAuthEnabled } from "@/lib/auth"
 
 export default async function LoginPage({
   searchParams,
@@ -36,7 +36,7 @@ export default async function LoginPage({
               Password reset successfully. Please sign in with your new password.
             </p>
           )}
-          <SignInButton />
+          <SignInButton googleEnabled={isGoogleAuthEnabled} />
         </CardContent>
       </Card>
     </div>
