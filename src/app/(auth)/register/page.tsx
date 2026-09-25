@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { auth } from "@/lib/auth"
+import { auth, isGoogleAuthEnabled } from "@/lib/auth"
 
 export default async function RegisterPage() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -25,7 +25,7 @@ export default async function RegisterPage() {
           <CardDescription>Get started with your new account</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
-          <SignUpForm />
+          <SignUpForm googleEnabled={isGoogleAuthEnabled} />
         </CardContent>
       </Card>
     </div>

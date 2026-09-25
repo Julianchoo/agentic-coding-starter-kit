@@ -1,0 +1,5 @@
+# Never upload local secrets or bootstrap state with `vercel deploy`.
+# (Vercel reads env vars from the project settings, not from these files.)
+.env
+.env.*
+.bootstrap.json
